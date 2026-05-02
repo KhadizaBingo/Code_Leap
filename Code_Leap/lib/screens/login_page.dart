@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'register.dart'; // 👈 make sure this file exists
-
-class LoginPage extends StatelessWidget {
+import 'home_page.dart'; // 👈 make sure this file exists
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +93,7 @@ class LoginPage extends StatelessWidget {
 
                   // Username field
                   TextField(
+                    controller: _usernameController,
                     decoration: InputDecoration(
                       hintText: "Username",
                       prefixIcon: const Icon(Icons.person_outline),
@@ -101,6 +110,7 @@ class LoginPage extends StatelessWidget {
 
                   // Password field
                   TextField(
+                    controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: "Password",
@@ -136,7 +146,14 @@ class LoginPage extends StatelessWidget {
                     width: double.infinity,
                     height: 52,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(username: _usernameController.text),
+                          ),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF02021A),
                         shape: RoundedRectangleBorder(
