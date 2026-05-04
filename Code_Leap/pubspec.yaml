@@ -54,11 +54,11 @@ flutter_native_splash:
   android: true
   ios: true
   branding_bottom_padding_ios: 35 
-android 12:
+android_12:
 color: "#FFFFFF"
 image: assets/logo.png
 branding: assets/branding.png
-# For information on the generic Dart part of this file, see the
+ #For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
@@ -73,6 +73,7 @@ flutter:
   assets:
     - assets/logo.png
     - assets/branding.png
+    - assets/python.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

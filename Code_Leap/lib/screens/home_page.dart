@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_page.dart';
+import 'preference_page.dart';
 
 class HomePage extends StatelessWidget {
   final String username;
@@ -11,8 +12,6 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Container(
         width: double.infinity,
-
-        // Background Gradient
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -27,23 +26,24 @@ class HomePage extends StatelessWidget {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16),
-
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                // Top Row
+                // 🔥 TOP BAR FIXED ALIGNMENT
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFB7D46D),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(Icons.code, color: Colors.black),
+
+                    // LOGO (ALIGNED WITH TEXT START)
+                    Image.asset(
+                      "assets/logo.png",
+                      height: 55,
+                      width: 55,
+                      fit: BoxFit.contain,
                     ),
+
+                    const Spacer(),
 
                     ElevatedButton(
                       onPressed: () {
@@ -61,93 +61,66 @@ class HomePage extends StatelessWidget {
                         "Logout",
                         style: TextStyle(color: Colors.black),
                       ),
-                    )
+                    ),
                   ],
                 ),
 
                 const SizedBox(height: 20),
 
-                // Welcome Text
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "Welcome, $username!",
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                // 🔥 WELCOME TEXT (ALIGNED WITH LOGO START LINE)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Welcome $username!",
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 12, 12, 12),
                     ),
-
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.local_fire_department,
-                              color: Colors.white, size: 18),
-                          SizedBox(width: 4),
-                          Text("1", style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
 
                 const SizedBox(height: 5),
 
                 const Text(
                   "Current Level: beginner",
-                  style: TextStyle(color: Colors.white70),
+                  style: TextStyle(color: Color.fromARGB(179, 22, 22, 22)),
                 ),
 
                 const SizedBox(height: 20),
 
-                // Progress Card
+                // PROGRESS CARD
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
-                      const Text(
+                      Text(
                         "Your Progress",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-
-                      const SizedBox(height: 5),
-
-                      const Text(
+                      SizedBox(height: 5),
+                      Text(
                         "Keep learning to level up!",
                         style: TextStyle(color: Colors.grey),
                       ),
-
-                      const SizedBox(height: 10),
-
+                      SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children: [
                           Text("Experience"),
                           Text("0 / 100 XP"),
                         ],
                       ),
-
-                      const SizedBox(height: 8),
-
+                      SizedBox(height: 8),
                       LinearProgressIndicator(
                         value: 0.0,
-                        backgroundColor: Colors.grey[300],
-                        color: Colors.grey,
+                        backgroundColor: Colors.grey,
+                        color: Colors.black,
                       ),
                     ],
                   ),
@@ -155,29 +128,40 @@ class HomePage extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // Feature Cards
                 Expanded(
                   child: ListView(
-                    children: const [
+                    children: [
+
                       FeatureTile(
                         icon: Icons.menu_book,
                         title: "Start Learning",
-                        subtitle: "Choose your level and begin lessons",
+                        subtitle: "Choose your language preference",
                         iconColor: Colors.green,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PreferencePage(),
+                            ),
+                          );
+                        },
                       ),
-                      FeatureTile(
+
+                      const FeatureTile(
                         icon: Icons.flash_on,
                         title: "Quick Quiz",
                         subtitle: "Test your knowledge",
                         iconColor: Colors.orange,
                       ),
-                      FeatureTile(
+
+                      const FeatureTile(
                         icon: Icons.emoji_events,
                         title: "Achievements",
                         subtitle: "Completed 0 lessons",
                         iconColor: Colors.green,
                       ),
-                      FeatureTile(
+
+                      const FeatureTile(
                         icon: Icons.access_time,
                         title: "Daily Reminder",
                         subtitle: "Set your learning schedule",
@@ -200,6 +184,7 @@ class FeatureTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final Color iconColor;
+  final VoidCallback? onTap;
 
   const FeatureTile({
     super.key,
@@ -207,33 +192,40 @@ class FeatureTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.iconColor,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: iconColor),
-          const SizedBox(width: 12),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 4),
-              Text(subtitle,
-                  style: const TextStyle(color: Colors.grey)),
-            ],
-          ),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 14),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: iconColor),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

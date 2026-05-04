@@ -1,5 +1,5 @@
+import 'package:code_leap/screens/welcomepage.dart';
 import 'package:flutter/material.dart';
- 
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -10,7 +10,6 @@ class RegisterPage extends StatelessWidget {
       body: Container(
         width: double.infinity,
 
-        // Background gradient (same as login)
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFFB7D46D), Color(0xFF2B2200)],
@@ -32,6 +31,7 @@ class RegisterPage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+
                   // Logo + Name
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -63,7 +63,10 @@ class RegisterPage extends StatelessWidget {
 
                   const Text(
                     "Create Account",
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
 
                   const SizedBox(height: 8),
@@ -75,10 +78,10 @@ class RegisterPage extends StatelessWidget {
 
                   const SizedBox(height: 25),
 
-                  // Name
+                  // Username
                   TextField(
                     decoration: InputDecoration(
-                      hintText: "Full Name",
+                      hintText: "Username",
                       prefixIcon: const Icon(Icons.person_outline),
                       filled: true,
                       fillColor: const Color(0xFFF3F3F3),
@@ -141,15 +144,29 @@ class RegisterPage extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  // Register button
+                  // Register Button
                   SizedBox(
                     width: double.infinity,
                     height: 52,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        // Show success message
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Registered Successfully"),
+                            content: Text("Register successful"),
+                          ),
+                        );
+
+                        // Wait 1 second
+                        await Future.delayed(
+                          const Duration(seconds: 1),
+                        );
+
+                        // Go to Welcome Page
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const WelcomePage(),
                           ),
                         );
                       },
@@ -161,7 +178,10 @@ class RegisterPage extends StatelessWidget {
                       ),
                       child: const Text(
                         "Register",
-                        style: TextStyle(fontSize: 16, color: Colors.white),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -178,7 +198,7 @@ class RegisterPage extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context); // back to login
+                          Navigator.pop(context);
                         },
                         child: const Text(
                           "Login",
