@@ -9,7 +9,6 @@ class LearningPage extends StatelessWidget {
     return Scaffold(
       body: Container(
         width: double.infinity,
-
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -25,20 +24,17 @@ class LearningPage extends StatelessWidget {
           child: Stack(
             children: [
 
-              // 🔙 BACK BUTTON (OUTSIDE BOX - TOP LEFT)
+              // 🔙 BACK BUTTON
               Positioned(
                 top: 10,
                 left: 10,
                 child: IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
                 ),
               ),
 
-              // CENTER CARD
+              // MAIN CARD
               Center(
                 child: Container(
                   margin: const EdgeInsets.all(20),
@@ -49,54 +45,70 @@ class LearningPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
 
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
 
-                      const SizedBox(height: 10),
-
-                      const Text(
-                        "Start Learning",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+                        const Text(
+                          "Start Learning",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
 
-                      const SizedBox(height: 5),
+                        const SizedBox(height: 5),
 
-                      const Text(
-                        "Choose a language to begin your journey",
-                        style: TextStyle(color: Colors.grey),
-                      ),
+                        const Text(
+                          "Choose a language to begin your journey",
+                          style: TextStyle(color: Colors.grey),
+                        ),
 
-                      const SizedBox(height: 15),
+                        const SizedBox(height: 15),
 
-                      LanguageTile(
-                        name: "Python",
-                        description: "Beginner friendly language for AI & web",
-                        image: "assets/python.png",
-                      ),
+                        LanguageTile(
+                          name: "Python",
+                          description:
+                              "Python is like talking to your computer in simple English. "
+                              "You give instructions, and it follows like a loyal assistant "
+                              "But make one mistake, and it’s like: I have no idea what you mean  "
+                              "It’s used for apps, games, and AI  "
+                              "Learning Python = confusion + frustration + OMG I DID IT ",
+                          image: "assets/python.png",
+                        ),
 
-                      LanguageTile(
-                        name: "C",
-                        description: "Low level system programming language",
-                        image: "assets/c.png",
-                      ),
+                        LanguageTile(
+                          name: "C",
+                          description:
+                              "C is that strict teacher who doesn’t care about your feelings. "
+                              "You forgot a semicolon? Boom  error. "
+                              "You want memory? Manage it yourself. "
+                              "But once you master C… you unlock programming boss level.",
+                          image: "assets/c.png",
+                        ),
 
-                      LanguageTile(
-                        name: "C++",
-                        description: "Used for games & object-oriented programming",
-                        image: "assets/cpp.png",
-                      ),
+                        LanguageTile(
+                          name: "C++",
+                          description:
+                              "C++ is C… but went to the gym and learned extra skills. "
+                              "Why be simple when you can be powerful AND confusing? "
+                              "Classes, objects, pointers — everything in one place. "
+                              "Hard mode programming with premium weapons.",
+                          image: "assets/cpp.png",
+                        ),
 
-                      LanguageTile(
-                        name: "Java",
-                        description: "Used for apps & enterprise systems",
-                        image: "assets/java.png",
-                      ),
-                    ],
+                        LanguageTile(
+                          name: "Java",
+                          description:
+                              "Java is that overprotective parent. "
+                              "Don’t worry, I’ll handle memory for you. "
+                              "Be structured and proper. Write once, run anywhere  "
+                              "Clean and professional programming language.",
+                          image: "assets/java.png",
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -120,6 +132,15 @@ class LanguageTile extends StatelessWidget {
     required this.image,
   });
 
+  // 🔥 ONLY FIRST SENTENCE PREVIEW
+  String getPreview(String text) {
+    int index = text.indexOf('.');
+    if (index != -1) {
+      return text.substring(0, index + 1);
+    }
+    return text;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -142,36 +163,35 @@ class LanguageTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: Colors.grey.shade300,
-            width: 1.5,
-          ),
+          border: Border.all(color: Colors.grey.shade300),
         ),
 
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.code, color: Colors.black),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+
+            Row(
+              children: [
+                const Icon(Icons.code),
+                const SizedBox(width: 10),
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    description,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 8),
+
+            // 🔥 ONLY 1 LINE PREVIEW
+            Text(
+              getPreview(description),
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 13,
               ),
             ),
           ],

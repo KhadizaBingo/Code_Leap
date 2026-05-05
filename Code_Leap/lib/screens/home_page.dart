@@ -30,36 +30,64 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                // 🔥 TOP BAR FIXED ALIGNMENT
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                // 🔥 TOP BAR WITH STREAK
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
 
-                    // LOGO (ALIGNED WITH TEXT START)
-                    Image.asset(
-                      "assets/logo.png",
-                      height: 55,
-                      width: 55,
-                      fit: BoxFit.contain,
+                    Row(
+                      children: [
+
+                        // LOGO
+                        Image.asset(
+                          "assets/logo.png",
+                          height: 55,
+                          width: 55,
+                          fit: BoxFit.contain,
+                        ),
+
+                        const Spacer(),
+
+                        // LOGOUT BUTTON
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                          ),
+                          child: const Text(
+                            "Logout",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
                     ),
 
-                    const Spacer(),
+                    const SizedBox(height: 6),
 
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginPage(),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                    // 🔥 STREAK BADGE
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withOpacity(0.95),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Text(
-                        "Logout",
-                        style: TextStyle(color: Colors.black),
+                        "🔥3",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ],
@@ -67,16 +95,13 @@ class HomePage extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // 🔥 WELCOME TEXT (ALIGNED WITH LOGO START LINE)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Welcome $username!",
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 12, 12, 12),
-                    ),
+                // WELCOME TEXT
+                Text(
+                  "Welcome $username!",
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
 
@@ -84,7 +109,7 @@ class HomePage extends StatelessWidget {
 
                 const Text(
                   "Current Level: beginner",
-                  style: TextStyle(color: Color.fromARGB(179, 22, 22, 22)),
+                  style: TextStyle(color: Colors.black54),
                 ),
 
                 const SizedBox(height: 20),
@@ -128,6 +153,7 @@ class HomePage extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
+                // FEATURES
                 Expanded(
                   child: ListView(
                     children: [
@@ -179,6 +205,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
+// FEATURE TILE
 class FeatureTile extends StatelessWidget {
   final IconData icon;
   final String title;

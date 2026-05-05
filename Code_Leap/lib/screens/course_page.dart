@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'python_sections_page.dart';
+import 'language_level_page.dart';
 
 class CoursePage extends StatelessWidget {
   final String language;
@@ -22,7 +22,7 @@ class CoursePage extends StatelessWidget {
         child: Column(
           children: [
 
-            // 🔙 TOP BAR
+            // TOP BAR
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: Row(
@@ -43,7 +43,7 @@ class CoursePage extends StatelessWidget {
               ),
             ),
 
-            // 📊 PROGRESS CARD
+            // PROGRESS CARD
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Container(
@@ -52,8 +52,8 @@ class CoursePage extends StatelessWidget {
                   color: const Color(0xFFB7D46D),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Column(
-                  children: const [
+                child: const Column(
+                  children: [
                     Text(
                       "Your Progress",
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -74,7 +74,7 @@ class CoursePage extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            // 🖼 IMAGE (FINAL FIX)
+            // IMAGE
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               padding: const EdgeInsets.all(20),
@@ -83,7 +83,7 @@ class CoursePage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Image.asset(
-                "assets/python.png", // 🔥 FIXED STATIC PATH
+                imagePath,
                 height: 160,
                 fit: BoxFit.contain,
               ),
@@ -91,7 +91,7 @@ class CoursePage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // 📄 DESCRIPTION
+            // DESCRIPTION
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               padding: const EdgeInsets.all(15),
@@ -107,7 +107,7 @@ class CoursePage extends StatelessWidget {
 
             const Spacer(),
 
-            // 🚀 CONTINUE BUTTON
+            // CONTINUE BUTTON (🔥 FIXED HERE)
             Padding(
               padding: const EdgeInsets.all(20),
               child: SizedBox(
@@ -118,7 +118,9 @@ class CoursePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PythonSectionsPage(),
+                        builder: (context) => LanguageSectionsPage(
+                          language: language,
+                        ),
                       ),
                     );
                   },

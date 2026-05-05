@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
-class PythonSectionsPage extends StatelessWidget {
-  const PythonSectionsPage({super.key});
+class CSectionsPage extends StatelessWidget {
+  const CSectionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         width: double.infinity,
-
-        // 🔥 GLOBAL APP THEME (KEEP SAME)
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -20,30 +18,21 @@ class PythonSectionsPage extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
         ),
-
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(
-              left: 8,
-              right: 16,
-              top: 16,
-              bottom: 16,
-            ),
-
+            padding: const EdgeInsets.only(left: 8, right: 16, top: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                // 🔙 TOP BAR
                 Row(
                   children: [
                     IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(Icons.arrow_back, color: Colors.white),
                     ),
-
                     const Text(
-                      "Python Course",
+                      "C Course",
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -62,16 +51,15 @@ class PythonSectionsPage extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // 🔥 SECTIONS LIST
                 Expanded(
                   child: ListView(
-                    children: [
-                      SectionTile(title: "Section 1: Introduction to Python"),
-                      SectionTile(title: "Section 2: Data Types and Variables"),
-                      SectionTile(title: "Section 3: Control Flow"),
-                      SectionTile(title: "Section 4: Functions and Modules"),
-                      SectionTile(title: "Section 5: Object-Oriented Programming"),
-                      SectionTile(title: "Section 6: File Handling"),
+                    children: const [
+                      SectionTile(title: "Introduction to C"),
+                      SectionTile(title: "Data Types"),
+                      SectionTile(title: "Input / Output"),
+                      SectionTile(title: "Control Statements"),
+                      SectionTile(title: "Functions"),
+                      SectionTile(title: "Pointers"),
                     ],
                   ),
                 ),
@@ -87,7 +75,7 @@ class PythonSectionsPage extends StatelessWidget {
 class SectionTile extends StatelessWidget {
   final String title;
 
-  const SectionTile({required this.title, super.key});
+  const SectionTile({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -97,18 +85,12 @@ class SectionTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.1),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.white.withOpacity(0.3)),
+          border: Border.all(color: Colors.white24),
         ),
         child: ListTile(
-          title: Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          title: Text(title,
+              style: const TextStyle(color: Colors.white)),
           trailing: const Icon(Icons.arrow_forward, color: Colors.white70),
-          onTap: () {},
         ),
       ),
     );
