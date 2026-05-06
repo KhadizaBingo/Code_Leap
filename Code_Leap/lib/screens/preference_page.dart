@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'learning_page.dart';
+import 'auth_service.dart'; // Ensure this exists in your project
 
 class PreferencePage extends StatefulWidget {
   const PreferencePage({super.key});
@@ -9,6 +10,7 @@ class PreferencePage extends StatefulWidget {
 }
 
 class _PreferencePageState extends State<PreferencePage> {
+  final AuthService _authService = AuthService(); // Integrated for no errors
   String? selected;
   String? suggestion;
   bool showRecommendation = false;
@@ -30,9 +32,9 @@ class _PreferencePageState extends State<PreferencePage> {
     }
   }
 
+  // --- UI Helper for Options ---
   Widget option(String text) {
     bool isSelected = selected == text;
-
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -60,10 +62,7 @@ class _PreferencePageState extends State<PreferencePage> {
             const SizedBox(width: 10),
             Text(
               text,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -76,54 +75,38 @@ class _PreferencePageState extends State<PreferencePage> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Color(0xFFB7D46D),
-              Color(0xFF2B2200),
-            ],
+            colors: [Color(0xFFB7D46D), Color(0xFF2B2200)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
-
         child: SafeArea(
           child: Stack(
             children: [
-
-              // 🔙 BACK BUTTON (TOP LEFT)
               Positioned(
                 top: 10,
                 left: 10,
                 child: IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
                 ),
               ),
-
-              // 🔥 MAIN CONTENT (FIXED START POSITION)
               Padding(
-                padding: const EdgeInsets.only(top: 60), // 👈 IMPORTANT FIX
+                padding: const EdgeInsets.only(top: 60),
                 child: Center(
                   child: SingleChildScrollView(
                     child: Container(
                       margin: const EdgeInsets.all(20),
                       padding: const EdgeInsets.all(25),
-
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                       ),
-
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
-                          // 🔥 NOW THIS STARTS PROPERLY UNDER BACK BUTTON
                           const Text(
                             "Quick Question",
                             style: TextStyle(
@@ -131,35 +114,29 @@ class _PreferencePageState extends State<PreferencePage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-
                           const SizedBox(height: 5),
-
                           const Text(
                             "Which programming languages are you already familiar with?",
                             style: TextStyle(color: Colors.grey),
                           ),
-
                           const SizedBox(height: 20),
-
                           option("I'm new"),
                           option("Python"),
                           option("C"),
                           option("C++"),
                           option("Java"),
-
                           const SizedBox(height: 20),
 
+                          // --- Continue Button ---
                           if (selected != null && !showRecommendation)
                             SizedBox(
                               width: double.infinity,
                               height: 50,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    suggestion = getSuggestion(selected!);
-                                    showRecommendation = true;
-                                  });
-                                },
+                                onPressed: () => setState(() {
+                                  suggestion = getSuggestion(selected!);
+                                  showRecommendation = true;
+                                }),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFFB7D46D),
                                   shape: RoundedRectangleBorder(
@@ -173,6 +150,7 @@ class _PreferencePageState extends State<PreferencePage> {
                               ),
                             ),
 
+                          // --- Recommendation Section ---
                           if (showRecommendation)
                             Container(
                               width: double.infinity,
@@ -185,7 +163,6 @@ class _PreferencePageState extends State<PreferencePage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
                                   const Text(
                                     "Nice choice 👏",
                                     style: TextStyle(
@@ -193,9 +170,7 @@ class _PreferencePageState extends State<PreferencePage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-
                                   const SizedBox(height: 8),
-
                                   Text(
                                     "We recommend: $suggestion",
                                     style: const TextStyle(
@@ -203,9 +178,7 @@ class _PreferencePageState extends State<PreferencePage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-
                                   const SizedBox(height: 15),
-
                                   SizedBox(
                                     width: double.infinity,
                                     height: 45,
@@ -214,14 +187,17 @@ class _PreferencePageState extends State<PreferencePage> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                const LearningPage(),
+                                            builder: (context) => LearningPage(
+                                              recommendedLanguage:
+                                                  suggestion, // Passing data to next page
+                                            ),
                                           ),
                                         );
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFFB7D46D),
+                                        backgroundColor: const Color(
+                                          0xFFB7D46D,
+                                        ),
                                       ),
                                       child: const Text(
                                         "Start Learning",

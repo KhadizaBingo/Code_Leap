@@ -1,67 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:code_leap/screens/home_page.dart';
-import 'package:code_leap/screens/auth_service.dart'; // 👈 adjust path if needed
+import 'auth_service.dart';
+import 'login_page.dart';
 
-class RegisterPage extends StatefulWidget {
-  // 👈 changed to StatefulWidget
-  const RegisterPage({super.key});
+class ResetPasswordPage extends StatefulWidget {
+  const ResetPasswordPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<ResetPasswordPage> createState() => _ResetPasswordPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  // Controllers
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  final TextEditingController _tokenController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-
+  final TextEditingController _confirmController = TextEditingController();
   bool _isLoading = false;
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
-
   final AuthService _authService = AuthService();
 
-  Future<void> _handleRegister() async {
-    final username = _usernameController.text.trim();
-    final email = _emailController.text.trim();
+  Future<void> _handleReset() async {
+    final token = _tokenController.text.trim();
     final password = _passwordController.text.trim();
-    final confirmPassword = _confirmPasswordController.text.trim();
+    final confirm = _confirmController.text.trim();
 
-    // Validation
-    if (username.isEmpty ||
-        email.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty) {
+    if (token.isEmpty || password.isEmpty || confirm.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please fill in all fields")),
       );
       return;
     }
 
-    if (username.contains(' ')) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Username cannot contain spaces"),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    if (!email.contains('@')) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter a valid email"),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    if (password != confirmPassword) {
+    if (password != confirm) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Passwords do not match"),
@@ -82,42 +51,29 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     setState(() => _isLoading = true);
-
-    final success = await _authService.register(username, email, password);
-
+    final success = await _authService.resetPassword(token, password);
     setState(() => _isLoading = false);
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Account created successfully! 🎉"),
+          content: Text("Password reset successful! Please login."),
           backgroundColor: Colors.green,
         ),
       );
-
-      await Future.delayed(const Duration(seconds: 1));
-
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => HomePage(username: username)),
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+        (route) => false,
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Username or email already exists. Try another."),
+          content: Text("Invalid or expired token. Try again."),
           backgroundColor: Colors.red,
         ),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    _usernameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
   }
 
   @override
@@ -144,55 +100,30 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Logo + Name
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset("assets/logo.png", height: 60, width: 60),
-                      const SizedBox(width: 12),
-                      RichText(
-                        text: const TextSpan(
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: "Code",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            TextSpan(
-                              text: "Leap",
-                              style: TextStyle(color: Color(0xFFB7D46D)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  const Icon(
+                    Icons.lock_open,
+                    size: 60,
+                    color: Color(0xFFB7D46D),
                   ),
-
-                  const SizedBox(height: 25),
-
+                  const SizedBox(height: 16),
                   const Text(
-                    "Create Account",
+                    "Reset Password",
                     style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                   ),
-
                   const SizedBox(height: 8),
-
                   const Text(
-                    "Register to get started",
+                    "Enter the token from your email and your new password",
+                    textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
-
                   const SizedBox(height: 25),
 
-                  // Username
+                  // Token field
                   TextField(
-                    controller: _usernameController,
+                    controller: _tokenController,
                     decoration: InputDecoration(
-                      hintText: "Username",
-                      prefixIcon: const Icon(Icons.person_outline),
+                      hintText: "Reset Token (from email)",
+                      prefixIcon: const Icon(Icons.vpn_key_outlined),
                       filled: true,
                       fillColor: const Color(0xFFF3F3F3),
                       border: OutlineInputBorder(
@@ -204,30 +135,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   const SizedBox(height: 16),
 
-                  // Email
-                  TextField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      hintText: "Email",
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      filled: true,
-                      fillColor: const Color(0xFFF3F3F3),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Password
+                  // New password
                   TextField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
-                      hintText: "Password",
+                      hintText: "New Password",
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -250,12 +163,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   const SizedBox(height: 16),
 
-                  // Confirm Password
+                  // Confirm password
                   TextField(
-                    controller: _confirmPasswordController,
+                    controller: _confirmController,
                     obscureText: _obscureConfirm,
                     decoration: InputDecoration(
-                      hintText: "Confirm Password",
+                      hintText: "Confirm New Password",
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -277,12 +190,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   const SizedBox(height: 20),
 
-                  // Register Button
+                  // Reset button
                   SizedBox(
                     width: double.infinity,
                     height: 52,
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : _handleRegister,
+                      onPressed: _isLoading ? null : _handleReset,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF02021A),
                         shape: RoundedRectangleBorder(
@@ -292,36 +205,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: _isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
-                              "Register",
+                              "Reset Password",
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
                               ),
                             ),
                     ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Back to Login
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Already have an account? ",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text(
-                          "Login",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),
