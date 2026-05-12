@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'sections_page.dart';
-import 'course_data.dart';
+import 'lesson_page.dart';
 
-class LanguageSectionsPage extends StatelessWidget {
-  final String language;
+class LessonsPage extends StatelessWidget {
+  final String sectionTitle;
+  final List<dynamic>? lessons;
 
-  const LanguageSectionsPage({
+  const LessonsPage({
     super.key,
-    required this.language,
+    required this.sectionTitle,
+    this.lessons,
   });
 
   @override
   Widget build(BuildContext context) {
-    final levels = CourseData.data[language] ?? [];
+    final data = lessons ?? [];
 
     return Scaffold(
       body: Container(
@@ -37,19 +38,22 @@ class LanguageSectionsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                // TOP BAR
+                // BACK BUTTON + TITLE
                 Row(
                   children: [
                     IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(Icons.arrow_back, color: Colors.white),
                     ),
-                    Text(
-                      "$language Course",
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+
+                    Expanded(
+                      child: Text(
+                        sectionTitle,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -57,33 +61,21 @@ class LanguageSectionsPage extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                const Text(
-                  "Select a level to continue learning",
-                  style: TextStyle(color: Colors.white70),
-                ),
-
-                const SizedBox(height: 20),
-
+                // LESSON LIST
                 Expanded(
                   child: ListView.builder(
-                    itemCount: levels.length,
+                    itemCount: data.length,
                     itemBuilder: (context, index) {
-                      final level = levels[index];
-
-                      final String levelName =
-                          level["name"] ?? "Level ${index + 1}";
-
-                      final List<dynamic> sections =
-                          level["sections"] ?? [];
+                      final lesson = data[index];
 
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SectionsPage(
-                                level: "Level ${index + 1}: $levelName",
-                                sections: sections,
+                              builder: (context) => LessonPage(
+                                title: lesson["title"],
+                                content: lesson["content"],
                               ),
                             ),
                           );
@@ -91,7 +83,7 @@ class LanguageSectionsPage extends StatelessWidget {
 
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 10),
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(14),
 
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.12),
@@ -104,23 +96,24 @@ class LanguageSectionsPage extends StatelessWidget {
                           child: Row(
                             children: [
 
-                              const Icon(Icons.workspace_premium,
-                                  color: Colors.white),
+                              const Icon(Icons.menu_book, color: Colors.white),
 
                               const SizedBox(width: 12),
 
                               Expanded(
                                 child: Text(
-                                  "Level ${index + 1}: $levelName",
+                                  "Lesson ${index + 1}: ${lesson["title"]}",
                                   style: const TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
 
-                              const Icon(Icons.arrow_forward,
-                                  color: Colors.white70),
+                              const Icon(
+                                Icons.arrow_forward,
+                                color: Colors.white70,
+                              ),
                             ],
                           ),
                         ),

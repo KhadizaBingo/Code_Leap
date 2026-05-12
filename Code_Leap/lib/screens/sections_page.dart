@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'lessons_page.dart';
 
 class SectionsPage extends StatelessWidget {
   final String level;
-  final List<String>? sections;
+  final List<dynamic>? sections;
 
   const SectionsPage({
     super.key,
@@ -10,24 +11,14 @@ class SectionsPage extends StatelessWidget {
     this.sections,
   });
 
-  // 🎯 DEFAULT 5 SECTIONS (EDIT HERE ANYTIME)
-  List<String> get defaultSections => [
-        "Introduction",
-        "Basics",
-        "Input & Output",
-        "Variables",
-        "Operators",
-      ];
-
   @override
   Widget build(BuildContext context) {
-    final data = sections ?? defaultSections;
+    final data = sections ?? [];
 
     return Scaffold(
       body: Container(
         width: double.infinity,
 
-        // 🌿 SAME THEME
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -47,7 +38,7 @@ class SectionsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                // 🔙 TOP BAR
+                // TOP BAR
                 Row(
                   children: [
                     IconButton(
@@ -75,41 +66,59 @@ class SectionsPage extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // 📚 SECTIONS LIST
                 Expanded(
                   child: ListView.builder(
                     itemCount: data.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        padding: const EdgeInsets.all(14),
 
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.25),
-                          ),
-                        ),
+                      final section = data[index];
 
-                        child: Row(
-                          children: [
-                            const Icon(Icons.book, color: Colors.white),
-
-                            const SizedBox(width: 12),
-
-                            Expanded(
-                              child: Text(
-                                "Section ${index + 1}: ${data[index]}",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LessonsPage(
+                                sectionTitle: section["title"],
+                                lessons: section["lessons"],
                               ),
                             ),
+                          );
+                        },
 
-                            const Icon(Icons.arrow_forward, color: Colors.white70),
-                          ],
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.all(14),
+
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.25),
+                            ),
+                          ),
+
+                          child: Row(
+                            children: [
+
+                              const Icon(Icons.book, color: Colors.white),
+
+                              const SizedBox(width: 12),
+
+                              Expanded(
+                                child: Text(
+                                  "Section ${index + 1}: ${section["title"]}",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+
+                              const Icon(Icons.arrow_forward,
+                                  color: Colors.white70),
+                            ],
+                          ),
                         ),
                       );
                     },
